@@ -35,3 +35,6 @@ View(data)
 
 c(1, 2, 3, 4.2)
 
+# add new line
+
+plot(1:4)
