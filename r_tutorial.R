@@ -38,3 +38,73 @@ c(1, 2, 3, 4.2)
 # add new line
 
 plot(1:4)
+
+# creating a dataset to play with
+
+nn <- 200
+temperature <- round(rnorm(nn, 273, 20), 3)
+eggs <- rpois(nn, 100)
+type <- sample(c("s1", "s2", "s3"), nn, replace = TRUE)
+
+data <- data.frame(temperature, eggs, type)
+View(data)
+write.csv(data, "/Users/tanjona/Documents/asa/misc/MBC/mbc-code/data_exo1.csv")
+
+
+#### Solution to the problem
+
+filename <- "/Users/tanjona/Documents/asa/misc/MBC/mbc-code/data_exo1.csv"
+
+data_exo <- read.csv(filename)
+View(data_exo)
+
+# first approach
+mea_temp <- mean(data_exo$temperature)
+mea_eggs <- mean(data_exo$eggs)
+
+med_temp <- median(data_exo$temperature)
+med_eggs <- median(data_exo$eggs)
+
+max_temp <- max(data_exo$temperature)
+max_eggs <- max(data_exo$eggs)
+
+min_temp <- min(data_exo$temperature)
+min_eggs <- min(data_exo$eggs)
+
+std_temp <- sd(data_exo$temperature)
+std_eggs <- sd(data_exo$eggs)
+
+temp <- c(mea_temp, med_temp, max_temp, min_temp, std_temp)
+eggs <- c(mea_eggs, med_eggs, max_eggs, min_eggs, std_eggs)
+
+df_exo <- data.frame(temperature = temp, n_eggs = eggs)
+row.names(df_exo) <- c("mean", "median", "max", "min", "std")
+
+View(df_exo)
+
+# Second approach
+
+data_exo2 <- data_exo[, c(-1, -4)]
+
+m1 <- apply(data_exo2, 2, mean)
+m2 <- apply(data_exo2, 2, median)
+m3 <- apply(data_exo2, 2, max)
+m4 <- apply(data_exo2, 2, min)
+m5 <- apply(data_exo2, 2, sd)
+
+df_exo2 <- rbind(mean = m1, median = m2, max = m3, min = m4, std = m5)
+
+View(df_exo2)
+
+# third approach
+library(dplyr)
+
+d2  <- data_exo |>
+    summarise(across(c(temperature, eggs),
+        list(mean = mean, median = median, max = max, min = min,  sd = sd)))
+
+df_exo3 <- as.data.frame(matrix(d2, nrow = 5))
+rownames(df_exo3) <- c("mean", "median", "max", "min", "std")
+colnames(df_exo3) <- c("temperature", "eggs")
+
+View(df_exo3)
