@@ -39,6 +39,12 @@ c(1, 2, 3, 4.2)
 
 plot(1:4)
 
+
+####### Exercise in R #####
+
+# this clears the memory
+rm(list=ls())
+
 # creating a dataset to play with
 
 nn <- 200
@@ -78,13 +84,23 @@ temp <- c(mea_temp, med_temp, max_temp, min_temp, std_temp)
 eggs <- c(mea_eggs, med_eggs, max_eggs, min_eggs, std_eggs)
 
 df_exo <- data.frame(temperature = temp, n_eggs = eggs)
-row.names(df_exo) <- c("mean", "median", "max", "min", "std")
+
+rownames(df_exo) <- c("mean", "median", "max", "min", "std")
 
 View(df_exo)
 
+newfile  <- "/Users/tanjona/Documents/asa/misc/MBC/mbc-code/data_exo1_result.csv"
+
+write.csv(df_exo, newfile)
+
 # Second approach
 
+data_exo[, "type"]
+data_exo[, 4]
+data_exo$type
+
 data_exo2 <- data_exo[, c(-1, -4)]
+View(data_exo2)
 
 m1 <- apply(data_exo2, 2, mean)
 m2 <- apply(data_exo2, 2, median)
@@ -108,3 +124,6 @@ rownames(df_exo3) <- c("mean", "median", "max", "min", "std")
 colnames(df_exo3) <- c("temperature", "eggs")
 
 View(df_exo3)
+
+matrix(1:10, nrow = 5 )
+matrix(1:10, nrow = 5, byrow = TRUE )
