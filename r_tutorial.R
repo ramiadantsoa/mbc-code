@@ -127,3 +127,44 @@ View(df_exo3)
 
 matrix(1:10, nrow = 5 )
 matrix(1:10, nrow = 5, byrow = TRUE )
+
+
+#### generating data for Twins ####
+
+# pool of species
+all_species <- paste("sp", 1:20, sep = "")
+
+# random number of individuals per combination of field and age
+n_lines <- rpois(9, 7)
+age3 <- rep("3", sum(n_lines[1:3]))
+age6 <- rep("6", sum(n_lines[4:6]))
+age9 <- rep("9", sum(n_lines[7:9]))
+
+# combining the vectors
+age <- c(age3, age6, age9)
+
+# generating field ID
+field <- c()
+id_field <- paste(rep(1:3, 3))
+for (i in 1:9){
+    temp <- rep(id_field[i], n_lines[i])
+    field <- c(field, temp)
+}
+
+# sampling species per field and age
+species <- c()
+for (i in 1:9){
+    temp <- sample(all_species, n_lines[i], replace = TRUE)
+    species <- c(species, temp)
+}
+
+# final data
+data <- data.frame(age, field, species)
+
+library(tidyverse)
+
+# calculating number of distinct species and individuals per age
+data_nsp  <- data |>
+    group_by(age)  |>
+    summarise(n_sp = n_distinct(species), n_ind = n())
+View(data_nsp)
