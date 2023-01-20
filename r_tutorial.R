@@ -168,3 +168,36 @@ data_nsp  <- data |>
     group_by(age)  |>
     summarise(n_sp = n_distinct(species), n_ind = n())
 View(data_nsp)
+
+
+## play with Maya's data
+library(dplyr)
+library(ggplot2)
+
+data  <- read.csv("/Users/tanjona/Downloads/Data_Maya - Mounting.csv")
+View(data)
+
+dim(data)
+
+d1  <- data  |>
+    group_by(Collectors.code)  |>
+    summarise(n_ind = n(), n_gen = n_distinct(Genres))
+
+d1b  <- data  |>
+    group_by(Collectors.code, subsample)  |>
+    summarise(n_ind = n(), n_gen = n_distinct(Genres))
+
+sum(d1$n_ind)
+View(d1b)
+
+ggplot(d1, aes(x = Collectors.code, y = n_gen))+
+    geom_col()
+
+ggplot(data, aes(x = Collectors.code)) +
+    geom_bar()
+
+
+ggplot(data, aes(x = subsample)) +
+    geom_bar()+
+    facet_wrap(~Collectors.code)
+
