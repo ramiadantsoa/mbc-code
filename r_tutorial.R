@@ -174,29 +174,37 @@ View(data_nsp)
 library(dplyr)
 library(ggplot2)
 
+#import data example
 data  <- read.csv("/Users/tanjona/Downloads/Data_Maya - Mounting.csv")
 View(data)
 
+# look at the number of rows and columns
 dim(data)
 
+# calculate the number of individuals and genra per transect
 d1  <- data  |>
     group_by(Collectors.code)  |>
     summarise(n_ind = n(), n_gen = n_distinct(Genres))
 
+
+# calculate the number of individuals and genra per transect per pitfall
 d1b  <- data  |>
     group_by(Collectors.code, subsample)  |>
     summarise(n_ind = n(), n_gen = n_distinct(Genres))
 
+# total number of individuals
 sum(d1$n_ind)
 View(d1b)
 
+# plot number of genera per transect
 ggplot(d1, aes(x = Collectors.code, y = n_gen))+
     geom_col()
 
+# same as above
 ggplot(data, aes(x = Collectors.code)) +
     geom_bar()
 
-
+# multiplanel figure: panel = transec
 ggplot(data, aes(x = subsample)) +
     geom_bar()+
     facet_wrap(~Collectors.code)
