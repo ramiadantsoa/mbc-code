@@ -209,3 +209,47 @@ ggplot(data, aes(x = subsample)) +
     geom_bar()+
     facet_wrap(~Collectors.code)
 
+
+## importing and more visualization of Maya's data
+# setting working directy to shorten filename
+setwd("/Users/tanjona/Library/Mobile Documents/com~apple~CloudDocs/misc/MBC/mbc-code/")
+filename  <- "data/Data_Maya.csv"
+data <- read.csv(filename)
+
+library(ggplot2)
+library(dplyr)
+View(data)
+
+# convert as factor so R knows it is not numbers.
+data$Type <- as.factor(data$Type)
+data$Sites <- as.factor(data$Sites)
+
+# partitioning the bar so a color represents a genus
+ggplot(data, aes(x = Type, fill = Genus)) +
+    geom_bar()
+
+# number of individuals per type and per site
+ggplot(data, aes(x = Type, fill = Sites)) +
+    geom_bar(position = "dodge") +
+    theme_bw()
+
+# creating a new dataset to the last column
+# represents the number of individuals per pitfall
+
+data2 <- data |>
+    group_by(Type, Sites, Transect, Subsample)  |>
+    summarize(n_ind = n())
+
+# making sure the code does want I want
+View(data2)
+
+# distribution of number of individual per site
+ggplot(data2, aes(x = Sites, y = n_ind)) +
+    geom_violin() +
+    facet_wrap(~Type)
+
+# another way of plotting using boxplot and adding raw data
+ggplot(data2, aes(x = Sites, y = n_ind)) +
+    geom_boxplot() +
+    geom_jitter(width = 0.05) +
+    facet_wrap(~Type)
