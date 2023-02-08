@@ -249,7 +249,37 @@ ggplot(data2, aes(x = Sites, y = n_ind)) +
     facet_wrap(~Type)
 
 # another way of plotting using boxplot and adding raw data
-ggplot(data2, aes(x = Sites, y = n_ind)) +
+fig <- ggplot(data2, aes(x = Sites, y = n_ind)) +
     geom_boxplot() +
     geom_jitter(width = 0.05) +
     facet_wrap(~Type)
+
+# exporting figures
+ggsave("fig/fig_box_demo.pdf", fig)
+
+ggsave("fig/fig_box_demo.png", fig,
+        dpi = 300, width = 2, height = 1, units = c("cm"))
+
+# creating a personalized theme
+mytheme <- theme(plot.title = element_text(hjust = 0.5),
+				axis.text = element_text(size = 10),
+				axis.title = element_text(size = 16,
+                                        face = "bold",
+                                        color = "black"),
+				panel.background = element_blank(),
+				panel.grid.minor = element_blank(),
+                    panel.grid.major = element_line(color = "gray30",
+                                                    size = 0.1,
+                                                    linetype = "dashed"),
+				axis.line = element_line(color = "black"),
+				legend.key = element_rect(fill = "transparent"))
+
+fig  <- ggplot(data2, aes(x = Sites, y = n_ind)) +
+    geom_boxplot() +
+    geom_jitter(width = 0.05) +
+    facet_wrap(~Type) +
+    labs(x = "Maya", y = "Tojo", title = "a figure") +
+    mytheme
+
+ggsave("fig/fig_box_demo.png", fig,
+        dpi = 300, width = 10, height = 7, units = c("cm"))
